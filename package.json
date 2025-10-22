@@ -26,7 +26,6 @@
     "@prisma/client": "^6.3.1",
     "dotenv-flow": "^4.1.0",
     "joi": "^18.0.1",
-    "dotenv-flow": "^4.1.0",
     "prisma": "^6.3.1",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1"
