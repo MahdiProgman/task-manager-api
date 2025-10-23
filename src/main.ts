@@ -18,6 +18,8 @@ async function bootstrap() {
 
   SwaggerModule.setup('api/docs', app, document);
 
+  app.setGlobalPrefix('api');
+
   const port = configService.getAppConfig().port;
 
   await app.listen(port, () => {
