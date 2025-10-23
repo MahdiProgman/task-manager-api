@@ -7,10 +7,12 @@ export class DatabaseService
   implements OnModuleInit, OnModuleDestroy
 {
   async onModuleInit() {
+    console.log('Connected To Database Successfully');
     await this.$connect();
   }
 
   async onModuleDestroy() {
     await this.$disconnect();
+    console.log('Closed Connection Successfully with Database');
   }
 }
