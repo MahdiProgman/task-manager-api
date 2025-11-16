@@ -1,6 +1,6 @@
-import { DatabaseService } from '../../../database/database.service';
+import { DatabaseService } from '../../../../database/database.service';
 import { UserRepository } from './user.repository';
-import { User } from '../entities/user.entity';
+import { User } from '../../domain/entities/user.entity';
 
 jest.mock('@prisma/client', () => ({
   PrismaClient: jest.fn().mockImplementation(() => ({

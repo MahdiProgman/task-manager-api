@@ -1,6 +1,6 @@
 import { DatabaseService } from 'src/database/database.service';
-import { UserRepository as IUserRepository } from '../contracts/user.repository';
-import { User } from '../entities/user.entity';
+import { UserRepository as IUserRepository } from '../../domain/contracts/user.repository';
+import { User } from '../../domain/entities/user.entity';
 import { UserMapper } from '../mappers/user.mapper';
 import { Injectable } from '@nestjs/common';
 

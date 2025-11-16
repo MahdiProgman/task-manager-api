@@ -1,4 +1,4 @@
-import { RefreshToken } from "./refresh-token.entity";
+import { RefreshToken } from './refresh-token.entity';
 
 describe('RefreshTokenEntity', () => {
   describe('create', () => {

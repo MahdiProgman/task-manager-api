@@ -1,7 +1,7 @@
 import { DatabaseService } from 'src/database/database.service';
-import { RefreshTokenRepository as IRefreshTokenRepository } from '../contracts/refresh-token.repository';
+import { RefreshTokenRepository as IRefreshTokenRepository } from '../../domain/contracts/refresh-token.repository';
 import { RefreshTokenMapper } from '../mappers/refresh-token.mapper';
-import { RefreshToken } from '../entities/refresh-token.entity';
+import { RefreshToken } from '../../domain/entities/refresh-token.entity';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

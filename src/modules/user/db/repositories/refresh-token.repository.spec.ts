@@ -1,5 +1,5 @@
 import { RefreshTokenRepository } from './refresh-token.repository';
-import { RefreshToken } from '../entities/refresh-token.entity';
+import { RefreshToken } from '../../domain/entities/refresh-token.entity';
 import { Test } from '@nestjs/testing';
 import { DatabaseService } from 'src/database/database.service';
 

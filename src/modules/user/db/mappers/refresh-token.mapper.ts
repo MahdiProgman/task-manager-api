@@ -2,7 +2,7 @@ import {
   Prisma,
   RefreshToken as RefreshTokenPersistenceEntity,
 } from '@prisma/client';
-import { RefreshToken as RefreshTokenDomainEntity } from '../entities/refresh-token.entity';
+import { RefreshToken as RefreshTokenDomainEntity } from '../../domain/entities/refresh-token.entity';
 
 export class RefreshTokenMapper {
   static toDomain(

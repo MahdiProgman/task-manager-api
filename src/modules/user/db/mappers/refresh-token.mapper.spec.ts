@@ -1,5 +1,5 @@
 import { RefreshToken as RefreshTokenPersistenceEntity } from '@prisma/client';
-import { RefreshToken as RefreshTokenDomainEntity } from '../entities/refresh-token.entity';
+import { RefreshToken as RefreshTokenDomainEntity } from '../../domain/entities/refresh-token.entity';
 import { RefreshTokenMapper } from './refresh-token.mapper';
 
 const refreshTokenPersistenceEntity: RefreshTokenPersistenceEntity = {

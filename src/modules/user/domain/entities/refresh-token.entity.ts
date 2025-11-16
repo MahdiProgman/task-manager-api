@@ -1,4 +1,4 @@
-export interface RefreshTokenProps {
+interface RefreshTokenProps {
   id?: string;
   userId: string;
   refreshToken: string;

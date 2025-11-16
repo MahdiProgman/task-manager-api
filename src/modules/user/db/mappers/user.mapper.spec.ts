@@ -1,4 +1,4 @@
-import { User as UserDomainEntity } from '../entities/user.entity';
+import { User as UserDomainEntity } from '../../domain/entities/user.entity';
 import { User as UserPersistenceEntity } from '@prisma/client';
 import { UserMapper } from './user.mapper';
 
