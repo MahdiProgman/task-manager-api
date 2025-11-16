@@ -16,6 +16,5 @@ import { RefreshTokenRepository } from './db/repositories/refresh-token.reposito
       useClass: RefreshTokenRepository,
     },
   ],
-  exports: [USER_REPOSITORY],
 })
 export class UserModule {}
