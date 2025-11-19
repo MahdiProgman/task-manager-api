@@ -26,6 +26,8 @@
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/swagger": "^11.2.1",
     "@prisma/client": "^6.3.1",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
     "dotenv-cli": "^10.0.0",
     "dotenv-flow": "^4.1.0",
     "joi": "^18.0.1",

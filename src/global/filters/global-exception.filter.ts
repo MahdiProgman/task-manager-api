@@ -1,7 +1,9 @@
 import { ArgumentsHost, ExceptionFilter } from '@nestjs/common';
 import { Response } from 'express';
 import { AppError } from 'src/common/exceptions/app-error.exception';
+import { ValidationFailedError } from 'src/common/exceptions/validation-failed.exception';
 import { FailedResponse } from 'src/common/types';
+import { ValidationError } from 'src/common/types/validation-error.type';
 
 export class GlobalExceptionFilter implements ExceptionFilter {
   public catch(exception: any, host: ArgumentsHost) {
@@ -12,6 +14,14 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     let statusCode: number = 500;
     let message: string = 'Internal Server Errror';
     let errorCode: string = 'INTERNAL_SERVER_ERROR';
+    let validationErrors: ValidationError[] = [];
+
+    if (exception instanceof ValidationFailedError) {
+      statusCode = exception.statusCode;
+      message = exception.message;
+      errorCode = exception.errorCode;
+      validationErrors = exception.validationErrors;
+    }
 
     if (exception instanceof AppError) {
       statusCode = exception.statusCode;
@@ -24,6 +34,8 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       statusCode: statusCode,
       message: message,
       errorCode: errorCode,
+      validationErrors:
+        validationErrors.length !== 0 ? validationErrors : undefined,
     } as FailedResponse);
   }
 }

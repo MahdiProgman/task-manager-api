@@ -2,6 +2,7 @@ import { ArgumentsHost } from '@nestjs/common';
 import { GlobalExceptionFilter } from './global-exception.filter';
 import { Response } from 'express';
 import { AppError } from 'src/common/exceptions/app-error.exception';
+import { ValidationFailedError } from 'src/common/exceptions/validation-failed.exception';
 import { HttpArgumentsHost } from '@nestjs/common/interfaces';
 
 describe('GlobalExceptionFilter', () => {
@@ -52,6 +53,25 @@ describe('GlobalExceptionFilter', () => {
       statusCode: 418,
       message: 'App Error Message',
       errorCode: 'MY_APP_ERROR',
+    });
+  });
+
+  it('should handle ValidationFailedError exception', () => {
+    const validationFailedError = new ValidationFailedError([
+      {
+        field: 'email',
+        messages: ['should be a valid email'],
+      },
+    ]);
+
+    filter.catch(validationFailedError, mockHost);
+
+    expect(mockResponse.json).toHaveBeenCalledWith({
+      success: false,
+      statusCode: 400,
+      message: 'Validation Failed',
+      errorCode: 'VALIDATION_FAILED',
+      validationErrors: validationFailedError.validationErrors,
     });
   });
 });

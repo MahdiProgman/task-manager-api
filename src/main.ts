@@ -4,6 +4,9 @@ import { ConfigService } from './config/contracts/config.service';
 import { CONFIG_SERVICE } from './config/constants';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { GlobalExceptionFilter } from './global/filters/global-exception.filter';
+import { ValidationPipe } from '@nestjs/common';
+import { ValidationError } from './common/types/validation-error.type';
+import { ValidationFailedError } from './common/exceptions/validation-failed.exception';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -20,6 +23,21 @@ async function bootstrap() {
   SwaggerModule.setup('api/docs', app, document);
 
   app.setGlobalPrefix('api');
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      exceptionFactory(errors) {
+        console.log(errors);
+        const validationErrors: ValidationError[] = errors.map((error) => ({
+          field: error.property,
+          messages: Object.values(error.constraints),
+        }));
+
+        throw new ValidationFailedError(validationErrors);
+      },
+    }),
+  );
 
   app.useGlobalFilters(new GlobalExceptionFilter());
 
