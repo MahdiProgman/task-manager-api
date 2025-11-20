@@ -1,4 +1,4 @@
-import { ArgumentsHost, ExceptionFilter } from '@nestjs/common';
+import { ArgumentsHost, ExceptionFilter, HttpException } from '@nestjs/common';
 import { Response } from 'express';
 import { AppError } from 'src/common/exceptions/app-error.exception';
 import { ValidationFailedError } from 'src/common/exceptions/validation-failed.exception';
@@ -27,6 +27,12 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       statusCode = exception.statusCode;
       message = exception.message;
       errorCode = exception.errorCode;
+    }
+
+    if (exception instanceof HttpException) {
+      statusCode = exception.getStatus();
+      message = exception.message;
+      errorCode = 'FAILED';
     }
 
     res.json({

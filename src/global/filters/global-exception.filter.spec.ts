@@ -1,4 +1,4 @@
-import { ArgumentsHost } from '@nestjs/common';
+import { ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
 import { GlobalExceptionFilter } from './global-exception.filter';
 import { Response } from 'express';
 import { AppError } from 'src/common/exceptions/app-error.exception';
@@ -72,6 +72,19 @@ describe('GlobalExceptionFilter', () => {
       message: 'Validation Failed',
       errorCode: 'VALIDATION_FAILED',
       validationErrors: validationFailedError.validationErrors,
+    });
+  });
+
+  it('should handle HttpException exception', () => {
+    const httpException = new HttpException('not found', HttpStatus.NOT_FOUND);
+
+    filter.catch(httpException, mockHost);
+
+    expect(mockResponse.json).toHaveBeenCalledWith({
+      success: false,
+      statusCode: 404,
+      message: httpException.message,
+      errorCode: 'failed',
     });
   });
 });
