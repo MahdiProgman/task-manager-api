@@ -8,6 +8,7 @@ DotenvFlow.config({
 
 const configSchema = Joi.object<Configuration, true>({
   app: Joi.object<AppConfig>({
+    jwt_secret: Joi.string().required(),
     port: Joi.number(),
   }),
 });
@@ -15,6 +16,7 @@ const configSchema = Joi.object<Configuration, true>({
 export function getConfigs(): Configuration {
   const config = {
     app: {
+      jwt_secret: process.env.APP_JWT_SECRET,
       port: parseInt(process.env.APP_PORT) || 3000,
     },
   };
