@@ -24,6 +24,10 @@ export class User {
     this.createdAt = props.createdAt;
   }
 
+  static create(props: UserProps) {
+    return new User(props);
+  }
+
   get email() {
     return this._email;
   }
