@@ -25,4 +25,14 @@ export class UserRepository implements IUserRepository {
 
     return userFound ? UserMapper.toDomain(userFound) : null;
   }
+
+  public async findByEmail(email: string): Promise<User | null> {
+    const userFound = await this.databaseService.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
+
+    return userFound ? UserMapper.toDomain(userFound) : null;
+  }
 }
