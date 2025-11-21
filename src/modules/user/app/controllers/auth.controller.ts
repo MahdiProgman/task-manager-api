@@ -3,12 +3,36 @@ import { AuthService } from '../services/auth.service';
 import { RegisterUserDto } from '../dtos/register-user.dto';
 import { SuccessResponse } from 'src/common/types';
 import { Response } from 'express';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  buildFailedResponse,
+  buildSuccessResponse,
+} from 'src/common/tools/swagger';
+import { EmailIsAlreadyTakenError } from '../exceptions/email-is-already-taken.exception';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
+  @ApiOperation({
+    summary: 'register a new user',
+  })
+  @ApiResponse({
+    description: 'user registered successfuly',
+    status: 201,
+    example: buildSuccessResponse({
+      statusCode: 201,
+      data: {
+        accessToken: 'access_token',
+      },
+    }),
+  })
+  @ApiResponse({
+    description: 'email already taken',
+    status: 409,
+    example: buildFailedResponse(new EmailIsAlreadyTakenError()),
+  })
   public async register(
     @Body() dto: RegisterUserDto,
     @Res({ passthrough: true }) res: Response,
