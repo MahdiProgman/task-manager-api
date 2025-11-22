@@ -9,6 +9,7 @@ import {
   buildSuccessResponse,
 } from 'src/common/tools/swagger';
 import { EmailIsAlreadyTakenError } from '../exceptions/email-is-already-taken.exception';
+import { LoginUserDto } from '../dtos/login-user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -38,6 +39,28 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ): Promise<SuccessResponse> {
     const result = await this.authService.register(dto);
+
+    res.cookie('refresh_token', result.refreshToken, {
+      httpOnly: true,
+      maxAge: 15 * 60 * 1000,
+      priority: 'high',
+      path: '/api/auth/access-token',
+    });
+
+    return {
+      statusCode: 201,
+      data: {
+        accessToken: result.accessToken,
+      },
+    };
+  }
+
+  @Post('login')
+  public async login(
+    @Body() dto: LoginUserDto,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<SuccessResponse> {
+    const result = await this.authService.login(dto);
 
     res.cookie('refresh_token', result.refreshToken, {
       httpOnly: true,
