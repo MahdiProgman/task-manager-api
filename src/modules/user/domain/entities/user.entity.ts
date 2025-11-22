@@ -12,7 +12,7 @@ export class User {
   public firstName: string;
   public lastName: string;
   private _email: string;
-  public _password: string;
+  private _password: string;
   public createdAt?: Date;
 
   constructor(props: UserProps) {

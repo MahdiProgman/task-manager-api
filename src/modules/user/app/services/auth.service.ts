@@ -7,6 +7,8 @@ import { RefreshTokenRepository } from '../../domain/contracts/refresh-token.rep
 import { RefreshToken } from '../../domain/entities/refresh-token.entity';
 import { AuthUtils } from '../utils/auth.util';
 import { User } from '../../domain/entities/user.entity';
+import { LoginUserDto } from '../dtos/login-user.dto';
+import { EmailOrPasswordIsIncorrect } from '../exceptions/email-or-password-is-incorrect.exception';
 
 @Injectable()
 export class AuthService {
@@ -45,6 +47,39 @@ export class AuthService {
 
     const accessToken = this.authUtils.generateAccessToken(
       newUser.id,
+      newRefreshTokenRecord.id,
+    );
+
+    return {
+      refreshToken: refreshToken,
+      accessToken: accessToken,
+    };
+  }
+
+  public async login(dto: LoginUserDto) {
+    const userFound = await this.userRepo.findByEmail(dto.email);
+
+    if (!userFound) throw new EmailOrPasswordIsIncorrect();
+
+    const isPasswordMatch = await this.authUtils.compare(
+      dto.password,
+      userFound.password,
+    );
+
+    if (!isPasswordMatch) throw new EmailOrPasswordIsIncorrect();
+
+    const refreshToken = this.authUtils.generateRefreshToken();
+    const hashedRefreshToken = await this.authUtils.hash(refreshToken);
+
+    const newRefreshTokenRecord = await this.refreshTokenRepo.createOne(
+      RefreshToken.create({
+        refreshToken: hashedRefreshToken,
+        userId: userFound.id,
+      }),
+    );
+
+    const accessToken = this.authUtils.generateAccessToken(
+      userFound.id,
       newRefreshTokenRecord.id,
     );
 

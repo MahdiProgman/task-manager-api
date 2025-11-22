@@ -39,4 +39,10 @@ export class AuthUtils {
 
     return hashedText;
   }
+
+  public async compare(plainText: string, hash: string): Promise<boolean> {
+    const isMatch = await argon2.verify(hash, plainText);
+
+    return isMatch;
+  }
 }
