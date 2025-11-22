@@ -10,6 +10,7 @@ import {
 } from 'src/common/tools/swagger';
 import { EmailIsAlreadyTakenError } from '../exceptions/email-is-already-taken.exception';
 import { LoginUserDto } from '../dtos/login-user.dto';
+import { EmailOrPasswordIsIncorrect } from '../exceptions/email-or-password-is-incorrect.exception';
 
 @Controller('auth')
 export class AuthController {
@@ -55,6 +56,24 @@ export class AuthController {
     };
   }
 
+  @ApiOperation({
+    summary: 'login to the system',
+  })
+  @ApiResponse({
+    description: 'login was successfull',
+    status: 201,
+    example: buildSuccessResponse({
+      statusCode: 201,
+      data: {
+        accessToken: 'access_token',
+      },
+    }),
+  })
+  @ApiResponse({
+    description: 'email or password is incorrect',
+    status: 401,
+    example: buildFailedResponse(new EmailOrPasswordIsIncorrect()),
+  })
   @Post('login')
   public async login(
     @Body() dto: LoginUserDto,
