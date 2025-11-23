@@ -3,5 +3,6 @@ export interface Configuration {
 }
 
 export interface AppConfig {
+  jwt_secret: string;
   port: number;
 }

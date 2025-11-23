@@ -8,6 +8,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { ValidationError } from './common/types/validation-error.type';
 import { ValidationFailedError } from './common/exceptions/validation-failed.exception';
 import { SuccessResponseHandlerInterceptor } from './global/interceptors/success-response-handler.interceptor';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -39,6 +40,8 @@ async function bootstrap() {
       },
     }),
   );
+
+  app.use(cookieParser());
 
   app.useGlobalFilters(new GlobalExceptionFilter());
   app.useGlobalInterceptors(new SuccessResponseHandlerInterceptor());
