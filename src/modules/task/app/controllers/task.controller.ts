@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { TaskService } from '../services/task.service';
 import { Request } from 'express';
 import { SuccessResponse } from 'src/common/types';
@@ -46,6 +54,15 @@ export class TaskController {
     return {
       statusCode: 201,
       data: newTask,
+    };
+  }
+
+  @Delete(':id')
+  public async removeTask(@Req() req: Request): Promise<SuccessResponse> {
+    await this.taskService.removeTask(req.userId, req.params.id);
+
+    return {
+      statusCode: 200,
     };
   }
 }
