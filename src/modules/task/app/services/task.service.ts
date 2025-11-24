@@ -60,4 +60,8 @@ export class TaskService {
       subTasks: [],
     };
   }
+
+  public async removeTask(userId: string, taskId: string) {
+    await this.taskRepo.deleteUserTaskById(userId, taskId);
+  }
 }
