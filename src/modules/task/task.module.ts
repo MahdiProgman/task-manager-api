@@ -8,6 +8,7 @@ import {
 import { TaskRepository } from './db/repos/task.repository';
 import { CategoryRepository } from './db/repos/category.repository';
 import { TaskQueryRepository } from './db/repos/task-query.repository';
+import { TaskService } from './app/services/task.service';
 
 @Module({
   imports: [DatabaseModule],
@@ -24,6 +25,7 @@ import { TaskQueryRepository } from './db/repos/task-query.repository';
       provide: TASK_QUERY_REPOSITORY,
       useClass: TaskQueryRepository,
     },
+    TaskService,
   ],
 })
 export class TaskModule {}
