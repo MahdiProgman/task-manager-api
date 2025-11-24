@@ -15,9 +15,21 @@ export class TaskQueryRepository implements ITaskQueryRepository {
         userId: userId,
       },
       include: {
-        subTasks: true,
+        subTasks: {
+          orderBy: {
+            status: 'asc',
+          },
+        },
         category: true,
       },
+      orderBy: [
+        {
+          priority: 'desc',
+        },
+        {
+          status: 'asc',
+        },
+      ],
     });
 
     return userTasks.map((userTask) => ({
