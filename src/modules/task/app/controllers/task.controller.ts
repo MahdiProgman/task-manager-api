@@ -18,7 +18,10 @@ import {
 } from '@nestjs/swagger';
 import { GetAllTasksResponse } from './responses/get-all-tasks-response.dto';
 import { CreateTaskDto } from '../dtos/create-task.dto';
-import { buildFailedResponse } from 'src/common/tools/swagger';
+import {
+  buildFailedResponse,
+  buildSuccessResponse,
+} from 'src/common/tools/swagger';
 import { CreateTaskResponse } from './responses/create-task.dto';
 import { CategoryNotFoundError } from '../exceptions/category-not-found.exception';
 
@@ -57,6 +60,7 @@ export class TaskController {
     };
   }
 
+  @ApiOkResponse({ example: buildSuccessResponse({ data: null }) })
   @Delete(':id')
   public async removeTask(@Req() req: Request): Promise<SuccessResponse> {
     await this.taskService.removeTask(req.userId, req.params.id);
