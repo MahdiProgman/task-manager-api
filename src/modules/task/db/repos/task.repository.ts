@@ -27,4 +27,16 @@ export class TaskRepository implements ITaskRepository {
       ? tasks.map((task) => TaskMapper.toDomain(task))
       : null;
   }
+
+  public async deleteUserTaskById(
+    userId: string,
+    taskId: string,
+  ): Promise<void> {
+    await this.databaseService.task.delete({
+      where: {
+        id: taskId,
+        userId: userId,
+      },
+    });
+  }
 }

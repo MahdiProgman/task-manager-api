@@ -8,6 +8,7 @@ interface MockedDatabaseService {
   task: {
     create: jest.Mock;
     findMany: jest.Mock;
+    delete: jest.Mock;
   };
 }
 
@@ -21,6 +22,7 @@ describe('TaskRepository', () => {
       task: {
         create: jest.fn(),
         findMany: jest.fn(),
+        delete: jest.fn(),
       },
     };
 
@@ -113,6 +115,14 @@ describe('TaskRepository', () => {
       const result = await taskRepository.findUserTasks('123');
 
       expect(result).toBeNull();
+    });
+  });
+
+  describe('deleteUserTaskById', () => {
+    it('should be delete task', async () => {
+      await expect(
+        taskRepository.deleteUserTaskById('abcd', 'abcd'),
+      ).resolves.toBeUndefined();
     });
   });
 });
