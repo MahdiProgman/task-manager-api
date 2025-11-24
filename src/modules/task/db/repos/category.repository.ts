@@ -27,4 +27,14 @@ export class CategoryRepository implements ICategoryRepository {
       ? categories.map((category) => CategoryMapper.toDomain(category))
       : null;
   }
+
+  public async findById(id: string): Promise<Category | null> {
+    const categoryFound = await this.databaseService.category.findUnique({
+      where: {
+        id: id,
+      },
+    });
+
+    return categoryFound ? CategoryMapper.toDomain(categoryFound) : null;
+  }
 }

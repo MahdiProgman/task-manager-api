@@ -18,9 +18,9 @@ type TaskPersistenceEntityWithSubTasks = PrismaTask & {
 
 export class TaskMapper {
   static toDomain(data: TaskPersistenceEntityWithSubTasks): TaskDomainEntity {
-    const subTasks = data.subTasks.map((subTask) =>
-      SubTaskMapper.toDomain(subTask),
-    );
+    const subTasks = data.subTasks
+      ? data.subTasks.map((subTask) => SubTaskMapper.toDomain(subTask))
+      : [];
 
     return TaskDomainEntity.create({
       id: data.id,
