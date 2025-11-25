@@ -26,6 +26,8 @@ import {
 import { CreateTaskResponse } from './responses/create-task.dto';
 import { CategoryNotFoundError } from '../exceptions/category-not-found.exception';
 import { UpdateTaskDto } from '../dtos/update-task.dto';
+import { UpdateTaskResponse } from './responses/update-task-response.dto';
+import { TaskNotFoundError } from '../exceptions/task-not-found.exception';
 
 @UseGuards(AuthGuard)
 @Controller('tasks')
@@ -72,6 +74,15 @@ export class TaskController {
     };
   }
 
+  @ApiOkResponse({ type: UpdateTaskResponse })
+  @ApiNotFoundResponse({
+    description: 'task not found',
+    example: buildFailedResponse(new TaskNotFoundError()),
+  })
+  @ApiNotFoundResponse({
+    description: 'category not found',
+    example: buildFailedResponse(new CategoryNotFoundError()),
+  })
   @Put(':id')
   public async updateTask(
     @Req() req: Request,
