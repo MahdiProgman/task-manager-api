@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Post,
+  Put,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -24,6 +25,7 @@ import {
 } from 'src/common/tools/swagger';
 import { CreateTaskResponse } from './responses/create-task.dto';
 import { CategoryNotFoundError } from '../exceptions/category-not-found.exception';
+import { UpdateTaskDto } from '../dtos/update-task.dto';
 
 @UseGuards(AuthGuard)
 @Controller('tasks')
@@ -67,6 +69,25 @@ export class TaskController {
 
     return {
       statusCode: 200,
+    };
+  }
+
+  @Put(':id')
+  public async updateTask(
+    @Req() req: Request,
+    @Body() dto: UpdateTaskDto,
+  ): Promise<SuccessResponse> {
+    const updatedTask = await this.taskService.updateTask(
+      {
+        id: req.params.id,
+        userId: req.userId,
+      },
+      dto,
+    );
+
+    return {
+      statusCode: 200,
+      data: updatedTask,
     };
   }
 }
