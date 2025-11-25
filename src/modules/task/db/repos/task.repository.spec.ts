@@ -9,6 +9,8 @@ interface MockedDatabaseService {
     create: jest.Mock;
     findMany: jest.Mock;
     delete: jest.Mock;
+    update: jest.Mock;
+    findUnique: jest.Mock;
   };
 }
 
@@ -23,6 +25,8 @@ describe('TaskRepository', () => {
         create: jest.fn(),
         findMany: jest.fn(),
         delete: jest.fn(),
+        update: jest.fn(),
+        findUnique: jest.fn(),
       },
     };
 
@@ -123,6 +127,62 @@ describe('TaskRepository', () => {
       await expect(
         taskRepository.deleteUserTaskById('abcd', 'abcd'),
       ).resolves.toBeUndefined();
+    });
+  });
+
+  describe('updateUserTaskById', () => {
+    it('should be update task', async () => {
+      const task = Task.create({
+        id: 'abcd',
+        title: 'Test Task',
+        description: 'Test Description',
+        priority: TaskPriority.High,
+        dueDate: new Date(),
+        userId: 'user-id',
+        categoryId: 'category-id',
+        createdAt: new Date(),
+      });
+
+      task.title = 'Test Task 2';
+
+      mockedDatabaseService.task.update.mockResolvedValue({
+        title: 'Test Task 2',
+      });
+
+      const result = await taskRepository.updateUserTaskById(task.id, task);
+
+      expect(result.title).toBe(task.title);
+    });
+  });
+
+  describe('findById', () => {
+    it('should be find and return it', async () => {
+      const databaseResult = {
+        id: '1234',
+        title: 'Task 2',
+        description: 'Description 2',
+        status: 'COMPLETED',
+        priority: 'HGIH',
+        dueDate: new Date(),
+        userId: '1234',
+        categoryId: '123',
+        createdAt: new Date(),
+        subTasks: [],
+      };
+
+      mockedDatabaseService.task.findUnique.mockResolvedValue(databaseResult);
+
+      const taskFound = await taskRepository.findById('1234');
+
+      expect(taskFound.id).toBe('1234');
+    });
+
+    it('should be return null', async () => {
+      mockedDatabaseService.task.findUnique.mockResolvedValue(null);
+
+      const taskFound = await taskRepository.findById('1234');
+
+      expect(taskFound).toBeNull();
     });
   });
 });

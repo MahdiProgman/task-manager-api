@@ -39,4 +39,25 @@ export class TaskRepository implements ITaskRepository {
       },
     });
   }
+
+  public async updateUserTaskById(id: string, task: Task): Promise<Task> {
+    const updatedTask = await this.databaseService.task.update({
+      where: {
+        id: id,
+      },
+      data: TaskMapper.toPersistence(task),
+    });
+
+    return TaskMapper.toDomain(updatedTask);
+  }
+
+  public async findById(id: string): Promise<Task | null> {
+    const taskFound = await this.databaseService.task.findUnique({
+      where: {
+        id: id,
+      },
+    });
+
+    return taskFound ? TaskMapper.toDomain(taskFound) : null;
+  }
 }
