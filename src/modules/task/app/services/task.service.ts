@@ -11,6 +11,8 @@ import { CategoryRepository } from '../../domain/repos/category.repository';
 import { CreateTaskDto } from '../dtos/create-task.dto';
 import { TaskQueryDto } from '../repos/queries/task-query.dto';
 import { CategoryNotFoundError } from '../exceptions/category-not-found.exception';
+import { UpdateTaskDto } from '../dtos/update-task.dto';
+import { TaskNotFoundError } from '../exceptions/task-not-found.exception';
 
 @Injectable()
 export class TaskService {
@@ -63,5 +65,55 @@ export class TaskService {
 
   public async removeTask(userId: string, taskId: string) {
     await this.taskRepo.deleteUserTaskById(userId, taskId);
+  }
+
+  public async updateTask(
+    ids: {
+      id: string;
+      userId: string;
+    },
+    dto: UpdateTaskDto,
+  ): Promise<TaskQueryDto> {
+    const taskFound = await this.taskRepo.findById(ids.id);
+
+    if (!taskFound) throw new TaskNotFoundError();
+    if (taskFound.userId !== ids.userId) throw new TaskNotFoundError();
+
+    const categoryFound = await this.categoryRepo.findById(
+      dto.categoryId ?? taskFound.categoryId,
+    );
+
+    if (!categoryFound) throw new CategoryNotFoundError();
+    if (categoryFound.userId !== ids.userId) throw new CategoryNotFoundError();
+
+    taskFound.changeCategory(categoryFound.id);
+
+    taskFound.title = dto.title ?? taskFound.title;
+    taskFound.description = dto.description ?? taskFound.description;
+
+    taskFound.changePriority(dto.priority ?? taskFound.priority);
+    taskFound.changeStatus(dto.status ?? taskFound.status);
+
+    const result = await this.taskRepo.updateUserTaskById(
+      taskFound.id,
+      taskFound,
+    );
+
+    return {
+      id: result.id,
+      title: result.title,
+      description: result.description,
+      status: result.status,
+      priority: result.priority,
+      dueDate: result.dueDate,
+      categoryName: categoryFound.name,
+      createdAt: result.createdAt,
+      subTasks: taskFound.subTasks.map((subTask) => ({
+        id: subTask.id,
+        title: subTask.title,
+        status: subTask.status,
+        createdAt: subTask.createdAt,
+      })),
+    };
   }
 }
