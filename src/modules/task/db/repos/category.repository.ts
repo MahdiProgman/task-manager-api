@@ -47,4 +47,15 @@ export class CategoryRepository implements ICategoryRepository {
 
     return categoryFound ? CategoryMapper.toDomain(categoryFound) : null;
   }
+
+  public async updateById(id: string, category: Category): Promise<Category> {
+    const updatedCategory = await this.databaseService.category.update({
+      where: {
+        id: id,
+      },
+      data: CategoryMapper.toPersistence(category),
+    });
+
+    return CategoryMapper.toDomain(updatedCategory);
+  }
 }

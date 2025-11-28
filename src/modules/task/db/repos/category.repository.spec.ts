@@ -9,6 +9,7 @@ interface MockedDatabaseService {
     findMany: jest.Mock;
     findUnique: jest.Mock;
     findFirst: jest.Mock;
+    update: jest.Mock;
   };
 }
 
@@ -24,6 +25,7 @@ describe('CategoryRepository', () => {
         findMany: jest.fn(),
         findUnique: jest.fn(),
         findFirst: jest.fn(),
+        update: jest.fn(),
       },
     };
 
@@ -143,6 +145,25 @@ describe('CategoryRepository', () => {
       const result = await categoryRepository.findByName('shopping');
 
       expect(result).toBeNull();
+    });
+  });
+
+  describe('updateById', () => {
+    it('should be update category', async () => {
+      const category = Category.create({
+        name: 'Test Category',
+        userId: '123',
+      });
+
+      category.changeName('new name');
+
+      const databaseResult = {
+        id: '1234',
+        name: 'new name',
+        userId: '123',
+      };
+
+      mockedDatabaseService.category.update.mockResolvedValue(databaseResult);
     });
   });
 });
