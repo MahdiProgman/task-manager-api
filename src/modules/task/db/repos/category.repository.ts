@@ -37,4 +37,14 @@ export class CategoryRepository implements ICategoryRepository {
 
     return categoryFound ? CategoryMapper.toDomain(categoryFound) : null;
   }
+
+  public async findByName(name: string): Promise<Category | null> {
+    const categoryFound = await this.databaseService.category.findFirst({
+      where: {
+        name: name,
+      },
+    });
+
+    return categoryFound ? CategoryMapper.toDomain(categoryFound) : null;
+  }
 }

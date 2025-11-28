@@ -8,6 +8,7 @@ interface MockedDatabaseService {
     create: jest.Mock;
     findMany: jest.Mock;
     findUnique: jest.Mock;
+    findFirst: jest.Mock;
   };
 }
 
@@ -22,6 +23,7 @@ describe('CategoryRepository', () => {
         create: jest.fn(),
         findMany: jest.fn(),
         findUnique: jest.fn(),
+        findFirst: jest.fn(),
       },
     };
 
@@ -113,6 +115,34 @@ describe('CategoryRepository', () => {
       const result = await categoryRepository.findById(userId);
 
       expect(result.name).toBe(databaseResult.name);
+    });
+  });
+
+  describe('findByName', () => {
+    it('should find and return category', async () => {
+      const name = 'shopping';
+
+      const databaseResult = {
+        id: '123',
+        name: name,
+        userId: '123',
+        createdAt: new Date(),
+      };
+
+      mockedDatabaseService.category.findFirst.mockResolvedValue(
+        databaseResult,
+      );
+
+      const result = await categoryRepository.findByName(name);
+
+      expect(result.name).toBe(databaseResult.name);
+    });
+    it('should be return null', async () => {
+      mockedDatabaseService.category.findFirst.mockResolvedValue(null);
+
+      const result = await categoryRepository.findByName('shopping');
+
+      expect(result).toBeNull();
     });
   });
 });
