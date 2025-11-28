@@ -23,7 +23,7 @@ export class Task {
   private _priority: TaskPriority;
   public dueDate: Date;
   public readonly userId: string;
-  public readonly categoryId: string;
+  private _categoryId: string;
   public readonly createdAt?: Date;
 
   private _subTasks: SubTask[];
@@ -36,7 +36,7 @@ export class Task {
     this._priority = props.priority;
     this.dueDate = props.dueDate;
     this.userId = props.userId;
-    this.categoryId = props.categoryId;
+    this._categoryId = props.categoryId;
     this.createdAt = props.createdAt;
 
     this._subTasks = props.subTasks ?? [];
@@ -58,12 +58,20 @@ export class Task {
     return this._subTasks;
   }
 
+  get categoryId() {
+    return this._categoryId;
+  }
+
   public changeStatus(status: TaskStatus) {
     this._status = status;
   }
 
   public changePriority(priority: TaskPriority) {
     this._priority = priority;
+  }
+
+  public changeCategory(categoryId: string) {
+    this._categoryId = categoryId;
   }
 
   public addSubTask(subTask: SubTask) {

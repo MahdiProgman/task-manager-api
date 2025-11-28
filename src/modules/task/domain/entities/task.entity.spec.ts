@@ -73,6 +73,22 @@ describe('TaskEntity', () => {
         expect(newTask.status).toBe(TaskStatus.Completed);
       });
     });
+    describe('changeCategory', () => {
+      it('should be change category', () => {
+        const newTask = Task.create({
+          title: 'Writing this test',
+          description: 'this test is very important',
+          priority: TaskPriority.High,
+          dueDate: new Date(),
+          userId: '123',
+          categoryId: '123',
+        });
+
+        newTask.changeCategory('abcd');
+
+        expect(newTask.categoryId).toBe('abcd');
+      });
+    });
   });
 
   describe('sub task', () => {
