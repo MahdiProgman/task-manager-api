@@ -45,7 +45,25 @@ export class TaskRepository implements ITaskRepository {
       where: {
         id: id,
       },
-      data: TaskMapper.toPersistence(task),
+      data: {
+        ...TaskMapper.toPersistence(task),
+        subTasks: {
+          upsert: task.subTasks.map((subTask) => ({
+            where: { id: subTask.id ?? '' },
+            create: {
+              title: subTask.title,
+              status: subTask.status,
+            },
+            update: {
+              title: subTask.title,
+              status: subTask.status,
+            },
+          })),
+        },
+      },
+      include: {
+        subTasks: true,
+      },
     });
 
     return TaskMapper.toDomain(updatedTask);
