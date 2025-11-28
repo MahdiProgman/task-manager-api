@@ -30,6 +30,7 @@ import { CategoryIsAlreadyExsists } from '../exceptions/categories/category-is-a
 import { UpdateCategoryDto } from '../dtos/categories/update-category.dto';
 import { UpdateCategoryResponse } from './responses/categories/update-category.response.dto';
 import { CategoryNotFoundError } from '../exceptions/tasks/category-not-found.exception';
+import { GetCategoryResponse } from './responses/categories/get-category.response.dto';
 
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
@@ -101,6 +102,17 @@ export class CategoryController {
 
     return {
       statusCode: 200,
+    };
+  }
+
+  @ApiOkResponse({ type: GetCategoryResponse })
+  @Get(':id')
+  public async getCategory(@Req() req: Request): Promise<SuccessResponse> {
+    const category = await this.categoryService.getCategory(req.params.id);
+
+    return {
+      statusCode: 200,
+      data: category,
     };
   }
 }
