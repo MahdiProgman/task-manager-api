@@ -8,11 +8,11 @@ import { TaskQueryRepository } from '../repos/task-query.repository';
 import { TaskRepository } from '../../domain/repos/task.repository';
 import { Task } from '../../domain/entities/task.entity';
 import { CategoryRepository } from '../../domain/repos/category.repository';
-import { CreateTaskDto } from '../dtos/create-task.dto';
+import { CreateTaskDto } from '../dtos/tasks/create-task.dto';
 import { TaskQueryDto } from '../repos/queries/task-query.dto';
-import { CategoryNotFoundError } from '../exceptions/category-not-found.exception';
-import { UpdateTaskDto } from '../dtos/update-task.dto';
-import { TaskNotFoundError } from '../exceptions/task-not-found.exception';
+import { CategoryNotFoundError } from '../exceptions/tasks/category-not-found.exception';
+import { UpdateTaskDto } from '../dtos/tasks/update-task.dto';
+import { TaskNotFoundError } from '../exceptions/tasks/task-not-found.exception';
 
 @Injectable()
 export class TaskService {
