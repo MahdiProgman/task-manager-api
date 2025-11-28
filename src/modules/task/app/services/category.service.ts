@@ -65,4 +65,13 @@ export class CategoryService {
       createdAt: categoryFound.createdAt,
     };
   }
+
+  public async deleteCategory(userId: string, id: string) {
+    const categoryFound = await this.categoryRepo.findById(id);
+
+    if (!categoryFound) throw new CategoryNotFoundError();
+    if (categoryFound.userId !== userId) throw new CategoryNotFoundError();
+
+    await this.categoryRepo.deleteById(id);
+  }
 }

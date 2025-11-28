@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Post,
   Put,
@@ -21,7 +22,10 @@ import {
 import { GetAllCategoriesResponse } from './responses/categories/get-all-categories.response.dto';
 import { CreateCategoryDto } from '../dtos/categories/create-category.dto';
 import { CreateNewCategoryResponse } from './responses/categories/create-new-category.response.dto';
-import { buildFailedResponse } from 'src/common/tools/swagger';
+import {
+  buildFailedResponse,
+  buildSuccessResponse,
+} from 'src/common/tools/swagger';
 import { CategoryIsAlreadyExsists } from '../exceptions/categories/category-is-already-exsists.exception';
 import { UpdateCategoryDto } from '../dtos/categories/update-category.dto';
 import { UpdateCategoryResponse } from './responses/categories/update-category.response.dto';
@@ -84,6 +88,19 @@ export class CategoryController {
     return {
       statusCode: 200,
       data: updatedCategory,
+    };
+  }
+
+  @ApiOkResponse({ example: buildSuccessResponse({}) })
+  @ApiNotFoundResponse({
+    example: buildFailedResponse(new CategoryNotFoundError()),
+  })
+  @Delete(':id')
+  public async deleteCategory(@Req() req: Request): Promise<SuccessResponse> {
+    await this.categoryService.deleteCategory(req.userId, req.params.id);
+
+    return {
+      statusCode: 200,
     };
   }
 }
