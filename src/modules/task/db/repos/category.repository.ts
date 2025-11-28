@@ -58,4 +58,12 @@ export class CategoryRepository implements ICategoryRepository {
 
     return CategoryMapper.toDomain(updatedCategory);
   }
+
+  public async deleteById(id: string): Promise<void> {
+    await this.databaseService.category.delete({
+      where: {
+        id: id,
+      },
+    });
+  }
 }

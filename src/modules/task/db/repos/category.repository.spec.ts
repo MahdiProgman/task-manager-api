@@ -10,6 +10,7 @@ interface MockedDatabaseService {
     findUnique: jest.Mock;
     findFirst: jest.Mock;
     update: jest.Mock;
+    delete: jest.Mock;
   };
 }
 
@@ -26,6 +27,7 @@ describe('CategoryRepository', () => {
         findUnique: jest.fn(),
         findFirst: jest.fn(),
         update: jest.fn(),
+        delete: jest.fn(),
       },
     };
 
@@ -164,6 +166,14 @@ describe('CategoryRepository', () => {
       };
 
       mockedDatabaseService.category.update.mockResolvedValue(databaseResult);
+    });
+  });
+
+  describe('deleteById', () => {
+    it('should be delete category by id', async () => {
+      await expect(
+        categoryRepository.deleteById('1234'),
+      ).resolves.toBeUndefined();
     });
   });
 });
