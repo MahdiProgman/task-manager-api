@@ -1,4 +1,4 @@
-import { TaskQueryDto } from '../../repos/queries/task-query.dto';
+import { TaskQueryDto } from '../../../repos/queries/task-query.dto';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class GetAllTasksResponse {

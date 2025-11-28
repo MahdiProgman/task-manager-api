@@ -11,4 +11,17 @@ describe('CategoryEntity', () => {
       expect(newCategory).toBeInstanceOf(Category);
     });
   });
+
+  describe('changeName', () => {
+    it('should be change name', () => {
+      const newCategory = Category.create({
+        name: 'Work',
+        userId: '123',
+      });
+
+      newCategory.changeName('Shopping');
+
+      expect(newCategory.name).toBe('Shopping');
+    });
+  });
 });

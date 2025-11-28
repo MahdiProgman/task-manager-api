@@ -18,17 +18,17 @@ import {
   ApiNotFoundResponse,
   ApiOkResponse,
 } from '@nestjs/swagger';
-import { GetAllTasksResponse } from './responses/get-all-tasks-response.dto';
-import { CreateTaskDto } from '../dtos/create-task.dto';
+import { GetAllTasksResponse } from './responses/tasks/get-all-tasks-response.dto';
+import { CreateTaskDto } from '../dtos/tasks/create-task.dto';
 import {
   buildFailedResponse,
   buildSuccessResponse,
 } from 'src/common/tools/swagger';
-import { CreateTaskResponse } from './responses/create-task.dto';
-import { CategoryNotFoundError } from '../exceptions/category-not-found.exception';
-import { UpdateTaskDto } from '../dtos/update-task.dto';
-import { UpdateTaskResponse } from './responses/update-task-response.dto';
-import { TaskNotFoundError } from '../exceptions/task-not-found.exception';
+import { CreateTaskResponse } from './responses/tasks/create-task.dto';
+import { CategoryNotFoundError } from '../exceptions/tasks/category-not-found.exception';
+import { UpdateTaskDto } from '../dtos/tasks/update-task.dto';
+import { UpdateTaskResponse } from './responses/tasks/update-task-response.dto';
+import { TaskNotFoundError } from '../exceptions/tasks/task-not-found.exception';
 
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
