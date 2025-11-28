@@ -13,6 +13,7 @@ import { Request } from 'express';
 import { SuccessResponse } from 'src/common/types';
 import { AuthGuard } from 'src/common/guards/auth.guard';
 import {
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -29,6 +30,7 @@ import { UpdateTaskDto } from '../dtos/update-task.dto';
 import { UpdateTaskResponse } from './responses/update-task-response.dto';
 import { TaskNotFoundError } from '../exceptions/task-not-found.exception';
 
+@ApiBearerAuth()
 @UseGuards(AuthGuard)
 @Controller('tasks')
 export class TaskController {
