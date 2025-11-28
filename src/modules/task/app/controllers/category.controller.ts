@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Put,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { CategoryService } from '../services/category.service';
 import { AuthGuard } from 'src/common/guards/auth.guard';
 import { Request } from 'express';
@@ -7,6 +15,7 @@ import {
   ApiBearerAuth,
   ApiConflictResponse,
   ApiCreatedResponse,
+  ApiNotFoundResponse,
   ApiOkResponse,
 } from '@nestjs/swagger';
 import { GetAllCategoriesResponse } from './responses/categories/get-all-categories.response.dto';
@@ -14,6 +23,9 @@ import { CreateCategoryDto } from '../dtos/categories/create-category.dto';
 import { CreateNewCategoryResponse } from './responses/categories/create-new-category.response.dto';
 import { buildFailedResponse } from 'src/common/tools/swagger';
 import { CategoryIsAlreadyExsists } from '../exceptions/categories/category-is-already-exsists.exception';
+import { UpdateCategoryDto } from '../dtos/categories/update-category.dto';
+import { UpdateCategoryResponse } from './responses/categories/update-category.response.dto';
+import { CategoryNotFoundError } from '../exceptions/tasks/category-not-found.exception';
 
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
@@ -49,6 +61,29 @@ export class CategoryController {
     return {
       statusCode: 201,
       data: newCategory,
+    };
+  }
+
+  @ApiOkResponse({ type: UpdateCategoryResponse })
+  @ApiNotFoundResponse({
+    example: buildFailedResponse(new CategoryNotFoundError()),
+  })
+  @Put(':id')
+  public async updateCategory(
+    @Req() req: Request,
+    @Body() dto: UpdateCategoryDto,
+  ): Promise<SuccessResponse> {
+    const updatedCategory = await this.categoryService.updateCategory(
+      {
+        id: req.params.id,
+        userId: req.userId,
+      },
+      dto,
+    );
+
+    return {
+      statusCode: 200,
+      data: updatedCategory,
     };
   }
 }
