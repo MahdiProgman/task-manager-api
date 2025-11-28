@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { TaskQueryDto } from '../../repos/queries/task-query.dto';
+import { TaskQueryDto } from '../../../repos/queries/task-query.dto';
 
-export class CreateTaskResponse {
+export class UpdateTaskResponse {
   @ApiProperty({
     example: true,
   })
