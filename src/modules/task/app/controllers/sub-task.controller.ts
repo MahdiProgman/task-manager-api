@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, Put, Req, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
 import { CreateSubTaskDto } from '../dtos/subtasks/create-sub-task.dto';
 import { SubTaskService } from '../services/sub-task.service';
@@ -7,6 +7,7 @@ import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiNotFoundResponse,
+  ApiOkResponse,
 } from '@nestjs/swagger';
 import {
   buildFailedResponse,
@@ -14,6 +15,8 @@ import {
 } from 'src/common/tools/swagger';
 import { TaskNotFoundError } from '../exceptions/tasks/task-not-found.exception';
 import { AuthGuard } from 'src/common/guards/auth.guard';
+import { UpdateSubTaskDto } from '../dtos/subtasks/update-sub-task.dto';
+import { SubTaskNotFoundError } from '../exceptions/subtasks/sub-task-not-found.exception';
 
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
@@ -40,6 +43,32 @@ export class SubTaskController {
 
     return {
       statusCode: 201,
+    };
+  }
+
+  @ApiOkResponse({ example: buildSuccessResponse({}) })
+  @ApiNotFoundResponse({
+    example: buildFailedResponse(new TaskNotFoundError()),
+  })
+  @ApiNotFoundResponse({
+    example: buildFailedResponse(new SubTaskNotFoundError()),
+  })
+  @Put(':subtask_id')
+  public async updateSubTask(
+    @Req() req: Request,
+    @Body() dto: UpdateSubTaskDto,
+  ): Promise<SuccessResponse> {
+    await this.subTaskService.updateSubTask(
+      {
+        userId: req.userId,
+        taskId: req.params.id,
+        subTaskId: req.params.subtask_id,
+      },
+      dto,
+    );
+
+    return {
+      statusCode: 200,
     };
   }
 }
