@@ -66,6 +66,18 @@ export class TaskRepository implements ITaskRepository {
       },
     });
 
+    const subTaskIdsToKeep =
+      task.subTasks.map((st) => st.id).filter(Boolean) || [];
+
+    await this.databaseService.subTask.deleteMany({
+      where: {
+        taskId: id,
+        id: {
+          notIn: subTaskIdsToKeep,
+        },
+      },
+    });
+
     return TaskMapper.toDomain(updatedTask);
   }
 
