@@ -83,4 +83,8 @@ export class Task {
       (subTask) => subTask.id !== subTaskId,
     );
   }
+
+  public findSubTask(subTaskId: string) {
+    return this.subTasks.find((subTask) => subTask.id === subTaskId) ?? null;
+  }
 }

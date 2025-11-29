@@ -17,10 +17,12 @@ import { ConfigModule } from 'src/config/config.module';
 import { CategoryController } from './app/controllers/category.controller';
 import { CategoryService } from './app/services/category.service';
 import { CategoryQueryRepository } from './db/repos/category-query.repository';
+import { SubTaskController } from './app/controllers/sub-task.controller';
+import { SubTaskService } from './app/services/sub-task.service';
 
 @Module({
   imports: [DatabaseModule, ConfigModule],
-  controllers: [TaskController, CategoryController],
+  controllers: [TaskController, CategoryController, SubTaskController],
   providers: [
     {
       provide: TASK_REPOSITORY,
@@ -44,6 +46,7 @@ import { CategoryQueryRepository } from './db/repos/category-query.repository';
     },
     TaskService,
     CategoryService,
+    SubTaskService,
   ],
 })
 export class TaskModule {}

@@ -89,6 +89,45 @@ describe('TaskEntity', () => {
         expect(newTask.categoryId).toBe('abcd');
       });
     });
+    describe('findSubTask', () => {
+      it('should be find sub task', () => {
+        const newSubTask = new SubTask({
+          id: 'abcd',
+          title: 'Writing this test',
+          taskId: '123',
+        });
+
+        const newTask = Task.create({
+          title: 'Writing this test',
+          description: 'this test is very important',
+          priority: TaskPriority.High,
+          dueDate: new Date(),
+          userId: '123',
+          categoryId: '123',
+
+          subTasks: [newSubTask],
+        });
+
+        const subTaskFound = newTask.findSubTask(newSubTask.id);
+
+        expect(subTaskFound.id).toBe(newSubTask.id);
+      });
+
+      it('should be return null', () => {
+        const newTask = Task.create({
+          title: 'Writing this test',
+          description: 'this test is very important',
+          priority: TaskPriority.High,
+          dueDate: new Date(),
+          userId: '123',
+          categoryId: '123',
+        });
+
+        const subTaskFound = newTask.findSubTask('abcd');
+
+        expect(subTaskFound).toBeNull();
+      });
+    });
   });
 
   describe('sub task', () => {
