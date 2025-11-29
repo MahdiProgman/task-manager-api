@@ -1,4 +1,12 @@
-import { Body, Controller, Post, Put, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Post,
+  Put,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { Request } from 'express';
 import { CreateSubTaskDto } from '../dtos/subtasks/create-sub-task.dto';
 import { SubTaskService } from '../services/sub-task.service';
@@ -66,6 +74,26 @@ export class SubTaskController {
       },
       dto,
     );
+
+    return {
+      statusCode: 200,
+    };
+  }
+
+  @ApiOkResponse({ example: buildSuccessResponse({}) })
+  @ApiNotFoundResponse({
+    example: buildFailedResponse(new TaskNotFoundError()),
+  })
+  @ApiNotFoundResponse({
+    example: buildFailedResponse(new SubTaskNotFoundError()),
+  })
+  @Delete(':subtask_id')
+  public async deleteSubTask(@Req() req: Request): Promise<SuccessResponse> {
+    await this.subTaskService.deleteSubTask({
+      userId: req.userId,
+      taskId: req.params.id,
+      subTaskId: req.params.subtask_id,
+    });
 
     return {
       statusCode: 200,

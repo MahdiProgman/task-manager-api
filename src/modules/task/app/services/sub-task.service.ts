@@ -44,11 +44,10 @@ export class SubTaskService {
     let subTaskUpdated = false;
 
     taskFound.subTasks.forEach((subTask) => {
-      console.log(subTask);
       if (subTask.id == ids.subTaskId) {
         subTask.title = dto.title ?? subTask.title;
         subTask.changeStatus(dto.status ?? subTask.status);
-        console.log(subTask);
+
         subTaskUpdated = true;
       }
     });
@@ -56,5 +55,24 @@ export class SubTaskService {
     if (!subTaskUpdated) throw new SubTaskNotFoundError();
 
     await this.taskRepo.updateUserTaskById(ids.taskId, taskFound);
+  }
+
+  public async deleteSubTask(ids: {
+    userId: string;
+    taskId: string;
+    subTaskId: string;
+  }) {
+    const taskFound = await this.taskRepo.findById(ids.taskId);
+
+    if (!taskFound) throw new TaskNotFoundError();
+    if (taskFound.userId !== ids.userId) throw new TaskNotFoundError();
+
+    const subTaskFound = taskFound.findSubTask(ids.subTaskId);
+
+    if (!subTaskFound) throw new SubTaskNotFoundError();
+
+    taskFound.removeSubTask(subTaskFound.id);
+    console.log(taskFound.findSubTask(subTaskFound.id));
+    await this.taskRepo.updateUserTaskById(taskFound.id, taskFound);
   }
 }
