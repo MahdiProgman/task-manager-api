@@ -74,6 +74,9 @@ export class TaskRepository implements ITaskRepository {
       where: {
         id: id,
       },
+      include: {
+        subTasks: true,
+      },
     });
 
     return taskFound ? TaskMapper.toDomain(taskFound) : null;
